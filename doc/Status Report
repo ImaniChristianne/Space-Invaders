@@ -1,1 +1,36 @@
-Status Report
+# Status Report
+<br /> Christianne Maene
+<br /> Nick Curry
+<br /> CSCI-B 438
+<br /> 10/12/2022
+## Status Report
+### Planning: Literature and Implementation
+Our Space Invaders game is based on the original Space Invaders game but with a
+different twist. The main players are the aliens. Several players can join the game as aliens. 
+Whoever reaches ground level by escaping all the fighter jet’s lasers wins the game. Each player
+gets three lives, and several players can win the game. All winners are displayed at the end of the 
+game. We are using Pycharm and Pygame as our two main tools for this game. The research 
+behind our game is latency. The main question we are trying to answer is: how can we reduce 
+latency and increase the competitiveness of our game? There are several articles on this, and 
+some interesting ones are listed in references. Most of the latency reduction must be taken care 
+of in the coding. Research shows that memory usage greatly affects latency. Making sure that 
+trash is properly disposed of is a good step.
+## What We Have Done
+- Created a GitHub Repository (https://github.com/ImaniChristianne/Space-Invaders ) for 
+our game where we push code and collaborate.
+- Coded the Client program for the game
+- Researched on network latency while gaming
+## What are Our Next Steps:
+- Code the Server program
+- Code the Network program
+- Code the game program
+- Do a game demo way before presentation day
+## References
+Bevilacqua, F. (2013, August 12). Building a peer-to-peer multiplayer networked game. Game 
+Development Envato Tuts+. Retrieved September 12, 2022, from 
+https://gamedevelopment.tutsplus.com/tutorials/building-a-peer-to-peermultiplayer networked-game--gamedev-10074
+God, T. S. (2021, March 27). Improving performance in Pygame – speed up your game. 
+CodeProject. Retrieved October 11, 2022, from 
+https://www.codeproject.com/Articles/5298051/Improving-Performance-in-PygameSpeed-Up-Your-Game 
+Pygame - time. GeeksforGeeks. (2021, October 25). Retrieved October 11, 2022, from 
+https://www.geeksforgeeks.org/pygame-time/

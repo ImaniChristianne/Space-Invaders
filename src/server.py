@@ -1,56 +1,74 @@
 import socket
-from _thread import *
+import asyncore
+import random
 import pickle
-from alien import Alien
+import time
 
-#creating our server
+BUFFERSIZE = 4098
 
-server = "192.168.11.1"
-port = 5555
+outgoing = []
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+class Minion:
+  def __init__(self, ownerid):
+    self.x = 50
+    self.y = 50
+    self.ownerid = ownerid
 
-try:
-    s.bind((server, port))
-except socket.error as e:
-    str(e)
+minionmap = {}
 
-s.listen((2))
-print("Waiting for a connection, Server Started")
+def updateWorld(message):
+  arr = pickle.loads(message)
+  print(str(arr))
+  playerid = arr[1]
+  x = arr[2]
+  y = arr[3]
 
-players = [Alien (0,0,50,50,(255,0,0)), Alien (0,0,50,50,(0,255,0))]
-def threaded_client(conn, player):
-    conn.send(pickle.dumps(players[player]))
-    reply = ""
+  if playerid == 0: return
 
-    while True:
-        try:
-            data = pickle.loads(conn.recv(4096))
-            players[player]= data
+  minionmap[playerid].x = x
+  minionmap[playerid].y = y
 
-            if not data:
-                print ("Disconnected")
-                break
-            else:
-                if player == 1:
-                    reply = players[0]
-                else:
-                    reply = players[1]
-                print("Received: ", data)
-                print("Sending: ", reply)
-            conn.sendall(pickle.dumps(reply))
-        except:
-            break
-    print("Lost connection")
+  remove = []
 
-    conn.close()
+  for i in outgoing:
+    update = ['player locations']
 
-currentPlayer = 0
+    for key, value in minionmap.items():
+      update.append([value.ownerid, value.x, value.y])
+    
+    try:
+      i.send(pickle.dumps(update))
+    except Exception:
+      remove.append(i)
+      continue
+    
+    print ('sent update data')
 
-while True:
-    conn, addr = s.accept()
-    print("Connected to:", addr)
+    for r in remove:
+      outgoing.remove(r)
 
+class MainServer(asyncore.dispatcher):
+  def __init__(self, port):
+    asyncore.dispatcher.__init__(self)
+    self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
+    self.bind(('', port))
+    self.listen(10)
+  def handle_accept(self):
+    conn, addr = self.accept()
+    print ('Connection address:' + addr[0] + " " + str(addr[1]))
+    outgoing.append(conn)
+    playerid = random.randint(1000, 1000000)
+    playerminion = Minion(playerid)
+    minionmap[playerid] = playerminion
+    conn.send(pickle.dumps(['id update', playerid]))
+    SecondaryServer(conn)
 
-    start_new_thread(threaded_client, (conn, currentPlayer))
-    currentPlayer += 1
+class SecondaryServer(asyncore.dispatcher_with_send):
+  def handle_read(self):
+    recievedData = self.recv(BUFFERSIZE)
+    if recievedData:
+      updateWorld(recievedData)
+    else: self.close()
+
+MainServer(4330)
+asyncore.loop()

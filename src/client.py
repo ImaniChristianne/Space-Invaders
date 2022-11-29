@@ -254,7 +254,6 @@ while True:
    if gameEvent[0] == 'player locations':
      gameEvent.pop(0)
      minions = []
-     spaceships=[]
      for minion in gameEvent:
        if minion[0] != playerid:
          minions.append(Alien(minion[1], minion[2], minion[0]))
@@ -280,7 +279,7 @@ while True:
 
  clock.tick(60)
  screen.blit(bg, (0, 0))
-
+ spaceship = random.choice(spaceship_group.sprites())
  cc.update()
  time_now = pygame.time.get_ticks()
  if len(spaceship_group) != 0:
@@ -323,7 +322,9 @@ while True:
  pygame.display.update()
 
 
- ge = ['position update', playerid, cc.rect.x, cc.rect.y]
+ ge = ['position update', playerid, cc.rect.x, cc.rect.y, cc.update(),cc.kill(), spaceship.rect.centerx, spaceship.rect.centery]
+
+
  s.send(pickle.dumps(ge))
 s.close()
 

@@ -7,7 +7,6 @@ import time
 BUFFERSIZE = 4098
 
 outgoing = []
-
 class Minion:
   def __init__(self, ownerid):
     self.x = 50

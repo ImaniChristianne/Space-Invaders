@@ -279,7 +279,7 @@ while True:
 
  clock.tick(60)
  screen.blit(bg, (0, 0))
- spaceship = random.choice(spaceship_group.sprites())
+
  cc.update()
  time_now = pygame.time.get_ticks()
  if len(spaceship_group) != 0:
@@ -307,22 +307,20 @@ while True:
  bullet_group.draw(screen)
  explosion_group.draw(screen)
  Alienbullet_group.draw(screen)
- bullet_group.update()
- alien_group.update()
- spaceship_group.update()
- explosion_group.update()
- Alienbullet_group.update()
+
 
 
 
  for m in minions:
      m.render()
-     cc.render()
+     cc.update()
 
  pygame.display.update()
 
 
- ge = ['position update', playerid, cc.rect.x, cc.rect.y, cc.update(),cc.kill(), spaceship.rect.centerx, spaceship.rect.centery]
+ ge = ['position update', playerid, cc.rect.x, cc.rect.y, cc.update(),
+       spaceship_group.update(),bullet_group.update(),alien_group.update(),explosion_group.update(),
+ Alienbullet_group.update()]
 
 
  s.send(pickle.dumps(ge))

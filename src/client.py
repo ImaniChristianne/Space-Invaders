@@ -1,5 +1,4 @@
-import time
-
+#Christianne Maene
 import pygame, sys
 from pygame import mixer
 from pygame.locals import *
@@ -83,6 +82,7 @@ class Explosion(pygame.sprite.Sprite):
         #if the animation is complete, delete explosion
         if self.index >= len(self.images) - 1 and self.counter >= explosion_speed:
             self.kill()
+
 class Alien(pygame.sprite.Sprite):
   def __init__(self, x, y, health):
         pygame.sprite.Sprite.__init__(self)
@@ -123,7 +123,6 @@ class Alien(pygame.sprite.Sprite):
         #shoot
         if key[pygame.K_SPACE] and time_now - self.last_shot > cooldown:
             laser_fx.play()
-            bullet = AlienBullet(self.rect.centerx, self.rect.top)
             Alienbullet_group.add(bullet)
             self.last_shot = time_now
 
@@ -153,9 +152,21 @@ class GameEvent:
  def __init__(self, vx, vy):
    self.vx = vx
    self.vy = vy
-
+class AlienBullet(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("images/alien_bullet.png")
+        self.rect = self.image.get_rect()
+        self.rect.center = [x, y]
+        self.rect.x=x
+        self.rect.y=y
+    def update(self):
+        self.rect.y += 2
+        if self.rect.top > HEIGHT:
+            self.kill()
 
 cc = Alien(200, 50, 3)
+bullet = AlienBullet(cc.rect.centerx, cc.rect.top)
 alien_group = pygame.sprite.Group()
 alien_group.add(cc)
 #create Bullets class
@@ -177,22 +188,6 @@ class Bullets(pygame.sprite.Sprite):
             cc.health_remaining -= 1
             explosion = Explosion(self.rect.centerx, self.rect.centery, 1)
             explosion_group.add(explosion)
-
-
-
-
-class AlienBullet(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("images/alien_bullet.png")
-        self.rect = self.image.get_rect()
-        self.rect.center = [x, y]
-        self.rect.x=x
-        self.rect.y=y
-    def update(self):
-        self.rect.y += 2
-        if self.rect.top > HEIGHT:
-            self.kill()
 
 
 
@@ -307,6 +302,11 @@ while True:
  bullet_group.draw(screen)
  explosion_group.draw(screen)
  Alienbullet_group.draw(screen)
+ spaceship_group.update()
+ bullet_group.update()
+ alien_group.update()
+ explosion_group.update()
+ Alienbullet_group.update()
 
 
 
@@ -318,9 +318,7 @@ while True:
  pygame.display.update()
 
 
- ge = ['position update', playerid, cc.rect.x, cc.rect.y, cc.update(),
-       spaceship_group.update(),bullet_group.update(),alien_group.update(),explosion_group.update(),
- Alienbullet_group.update()]
+ ge = ['position update', playerid, cc.rect.x, cc.rect.y, cc.update(), bullet.update(), bullet.rect.centerx, bullet.rect.centery]
 
 
  s.send(pickle.dumps(ge))

@@ -27,6 +27,8 @@ clock = pygame.time.Clock()
 serverAddr = '192.168.1.67'
 if len(sys.argv) == 2:
  serverAddr = sys.argv[1]
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect((serverAddr, 4330))
 
 sprites1 = pygame.image.load('images/alien1.png')
 sprites2 = pygame.image.load('images/alien2.png')
@@ -42,8 +44,6 @@ laser_fx.set_volume(0.25)
 explosion_fx = pygame.mixer.Sound("images/explosion.wav")
 explosion_fx.set_volume(0.25)
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((serverAddr, 4330))
 spaceship_cooldown = 100#bullet cooldown in milliseconds
 last_spaceship_shot = pygame.time.get_ticks()
 playerid = 0
@@ -92,9 +92,12 @@ class Alien(pygame.sprite.Sprite):
         self.health_start = health
         self.health_remaining = health
         self.last_shot = pygame.time.get_ticks()
+        self.id = id
 
 
   def update(self):
+        if self.id == 0:
+           self.id = playerid
         #set movement speed
         speed = 3
         #set a cooldown variable
@@ -142,7 +145,8 @@ class Alien(pygame.sprite.Sprite):
         elif self.rect.y ==HEIGHT:
             game_over = 2
         return game_over
-
+  def render(self):
+    screen.blit(self.image, (self.rect.x, self.rect.y))
 
 
 class GameEvent:
@@ -312,7 +316,9 @@ while True:
 
 
 
-
+ for m in minions:
+     m.render()
+     cc.render()
 
  pygame.display.update()
 

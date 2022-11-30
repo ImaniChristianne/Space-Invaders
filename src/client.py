@@ -1,5 +1,3 @@
-import time
-
 import pygame, sys
 from pygame import mixer
 from pygame.locals import *
@@ -44,7 +42,7 @@ laser_fx.set_volume(0.25)
 explosion_fx = pygame.mixer.Sound("images/explosion.wav")
 explosion_fx.set_volume(0.25)
 
-spaceship_cooldown = 100#bullet cooldown in milliseconds
+spaceship_cooldown = 300 #bullet cooldown in milliseconds
 last_spaceship_shot = pygame.time.get_ticks()
 playerid = 0
 
@@ -197,6 +195,7 @@ class AlienBullet(pygame.sprite.Sprite):
 
 
 
+
 #create sprite groups
 spaceship_group = pygame.sprite.Group()
 bullet_group = pygame.sprite.Group()
@@ -328,5 +327,6 @@ while True:
 
  s.send(pickle.dumps(ge))
 s.close()
+
 
 

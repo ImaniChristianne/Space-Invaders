@@ -22,7 +22,7 @@ pygame.display.set_caption('Space Invaders')
 font40 = pygame.font.SysFont('Constantia', 40)
 clock = pygame.time.Clock()
 
-serverAddr = '192.168.1.67'
+serverAddr = '149.160.80.234'
 if len(sys.argv) == 2:
  serverAddr = sys.argv[1]
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

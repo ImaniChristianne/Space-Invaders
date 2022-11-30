@@ -7,7 +7,7 @@ import pickle
 BUFFERSIZE = 4098
 
 outgoing = []
-class Minion:
+class Alien:
   def __init__(self, ownerid):
     self.x = 50
     self.y = 50
@@ -17,7 +17,7 @@ class Minion:
 minionmap = {}
 
 
-def updateWorld(message):
+def spaceUpdate(message):
   arr = pickle.loads(message)
   print(str(arr))
   playerid = arr[1]
@@ -62,8 +62,8 @@ class MainServer(asyncore.dispatcher):
     print ('Connection address:' + addr[0] + " " + str(addr[1]))
     outgoing.append(conn)
     playerid = random.randint(1000, 1000000)
-    playerminion = Minion(playerid)
-    minionmap[playerid] = playerminion
+    alien = Alien(playerid)
+    minionmap[playerid] = alien
     conn.send(pickle.dumps(['id update', playerid]))
     SecondaryServer(conn)
 
@@ -71,7 +71,7 @@ class SecondaryServer(asyncore.dispatcher_with_send):
   def handle_read(self):
     recievedData = self.recv(BUFFERSIZE)
     if recievedData:
-      updateWorld(recievedData)
+      spaceUpdate(recievedData)
     else: self.close()
 
 MainServer(4330)

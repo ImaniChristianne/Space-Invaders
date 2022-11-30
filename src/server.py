@@ -2,7 +2,7 @@ import socket
 import asyncore
 import random
 import pickle
-import time
+
 
 BUFFERSIZE = 4098
 
@@ -11,9 +11,11 @@ class Minion:
   def __init__(self, ownerid):
     self.x = 50
     self.y = 50
+    self.health = 3
     self.ownerid = ownerid
 
 minionmap = {}
+
 
 def updateWorld(message):
   arr = pickle.loads(message)
@@ -26,6 +28,9 @@ def updateWorld(message):
 
   minionmap[playerid].x = x
   minionmap[playerid].y = y
+
+
+
 
   remove = []
 

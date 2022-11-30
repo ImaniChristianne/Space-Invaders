@@ -99,7 +99,7 @@ class Alien(pygame.sprite.Sprite):
         #set movement speed
         speed = 3
         #set a cooldown variable
-        cooldown = 500 #milliseconds
+
         game_over = 0
 
 
@@ -119,11 +119,7 @@ class Alien(pygame.sprite.Sprite):
         #record current time
         time_now = pygame.time.get_ticks()
         #shoot
-        if key[pygame.K_SPACE] and time_now - self.last_shot > cooldown:
-            laser_fx.play()
-            bullet = AlienBullet(self.rect.centerx, self.rect.top)
-            Alienbullet_group.add(bullet)
-            self.last_shot = time_now
+
 
 
         #update mask
@@ -196,6 +192,7 @@ class AlienBullet(pygame.sprite.Sprite):
 
 
 
+
 #create sprite groups
 spaceship_group = pygame.sprite.Group()
 bullet_group = pygame.sprite.Group()
@@ -258,7 +255,7 @@ while True:
          minions.append(Alien(minion[1], minion[2], minion[0]))
 
 
-
+ cooldown = 500 #milliseconds
  for event in pygame.event.get():
    if event.type == QUIT:
       pygame.quit()
@@ -268,6 +265,11 @@ while True:
      if event.key == K_RIGHT: cc.vx = 7
      if event.key == K_UP: cc.vy = -7
      if event.key == K_DOWN: cc.vy = 7
+     if event.key == K_SPACE and time_now - cc.last_shot > cooldown:
+            laser_fx.play()
+            bullet = AlienBullet(cc.rect.centerx, cc.rect.top)
+            Alienbullet_group.add(bullet)
+            cc.last_shot = time_now
    if event.type == KEYUP:
      if event.key == K_LEFT and cc.vx == -7: cc.vx = 0
      if event.key == K_RIGHT and cc.vx == 7: cc.vx = 0
@@ -310,6 +312,7 @@ while True:
  alien_group.update()
  explosion_group.update()
  Alienbullet_group.update()
+ spaceship_group.update()
 
 
 
@@ -321,7 +324,7 @@ while True:
  pygame.display.update()
 
 
- ge = ['position update', playerid, cc.rect.x, cc.rect.y, spaceship_group.update()]
+ ge = ['position update', playerid, cc.rect.x, cc.rect.y]
 
 
  s.send(pickle.dumps(ge))

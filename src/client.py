@@ -306,7 +306,6 @@ while True:
  bullet_group.draw(screen)
  explosion_group.draw(screen)
  Alienbullet_group.draw(screen)
- spaceship_group.update()
  bullet_group.update()
  alien_group.update()
  explosion_group.update()
@@ -322,7 +321,7 @@ while True:
  pygame.display.update()
 
 
- ge = ['position update', playerid, cc.rect.x, cc.rect.y]
+ ge = ['position update', playerid, cc.rect.x, cc.rect.y, spaceship_group.update()]
 
 
  s.send(pickle.dumps(ge))
